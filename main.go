@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -46,9 +47,11 @@ func main() {
 			MakeRecord(&Person{Name: Name, Age: newage})
 
 		} else if commands[0] == "display" {
-			server := serverRunner()
-			server.Run(":8099")
 			// display the persons list
+			fmt.Println("The list is as following :")
+			for _, element := range GetAllPersons() {
+				fmt.Printf("[Name]: %v [Age]: %v\n", element.Name, element.Age)
+			}
 		}
 	}
 
