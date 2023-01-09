@@ -26,6 +26,8 @@ func StartDb() *gorm.DB {
 	}
 	return db
 }
+
+// get all persons
 func GetAllPersons() []Person {
 	db := StartDb()
 	var persons []Person
@@ -33,16 +35,22 @@ func GetAllPersons() []Person {
 
 	return persons
 }
+
+// create a person record
 func MakeRecord(p *Person) {
 	db := StartDb()
 	db.Create(p)
 }
+
+// initialize the database
 func Seed(db *gorm.DB) {
 	records := getInitialization()
 	for _, element := range records {
 		db.Create(element)
 	}
 }
+
+// load the database
 func LoadDatabase() {
 	db := StartDb()
 	db.AutoMigrate(&Person{})

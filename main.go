@@ -52,6 +52,9 @@ func main() {
 			for _, element := range GetAllPersons() {
 				fmt.Printf("[Name]: %v [Age]: %v\n", element.Name, element.Age)
 			}
+		} else if commands[0] == "runserver" {
+			server := serverRunner()
+			server.Run(":8099")
 		}
 	}
 
