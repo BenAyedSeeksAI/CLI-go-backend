@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -29,10 +30,27 @@ func serverRunner() *gin.Engine {
 	server.GET("/persons", getPersons)
 	// testing the server
 	server.GET("/test", test)
-	// // server.GET("/data", getPersons)
 	return server
 }
+func checkMigration() bool {
+	path, _ := os.Getwd()
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		panic(err.Error())
+	}
+	dbfile := "person.db"
+	for _, file := range files {
+		if file.Name() == dbfile {
+			return true
+		}
+	}
+	return false
+}
 func main() {
+	if !checkMigration() {
+		LoadDatabase()
+		fmt.Println("Database created ...")
+	}
 	if len(os.Args) > 1 {
 		commands := os.Args[1:]
 		if commands[0] == "add" {
@@ -53,6 +71,7 @@ func main() {
 				fmt.Printf("[Name]: %v [Age]: %v\n", element.Name, element.Age)
 			}
 		} else if commands[0] == "runserver" {
+			// run the server
 			server := serverRunner()
 			server.Run(":8099")
 		}
